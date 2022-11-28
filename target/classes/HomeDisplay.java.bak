@@ -1,0 +1,831 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+
+public class HomeDisplay {
+    public JFrame frame = new JFrame();
+    private String[] temp = new String[6];
+    int tampilkan = 1;
+
+    void changeState () {
+        tampilkan = 0;
+    }
+
+    void copyFileUsingStream(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
+        }
+    }
+
+    void editMember (String idBaru, String judul, String penulis, String tahun, String foto, String idLama) {
+        String sql = String.format("update book set book_id = '%s', judul = '%s', penulis = '%s', tahun = '%s', foto = '%s' where book_id = '%s'", idBaru, judul, penulis, tahun, foto, idLama);
+
+        try {
+            Database dataRaelsa = new Database();
+            dataRaelsa.perintah.executeUpdate(sql);
+            dataRaelsa.koneksi.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    boolean cekBuku (String kodeBuku) {
+        String sql = String.format("select * from book where book_id = '%s'", kodeBuku);
+
+        try {
+            Database dataRaelsa = new Database();
+            ResultSet result = dataRaelsa.perintah.executeQuery(sql);
+            result.next();
+            temp[0] = result.getString("book_id");
+            temp[1] = result.getString("judul");
+            temp[2] = result.getString("tahun");
+            temp[3] = result.getString("penulis");
+            temp[4] = String.valueOf(result.getInt("status"));
+            temp[5] = result.getString("foto");
+            dataRaelsa.koneksi.close();
+            return true;
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    void hapusBuku (String id) {
+        String sql = String.format("delete from book where book_id = '%s'", id);
+
+        try {
+            Database dataRaelsa = new Database();
+            dataRaelsa.perintah.executeUpdate(sql);
+            dataRaelsa.koneksi.close();
+
+        } catch (SQLException e) {
+        }
+    }
+
+    HomeDisplay (String namaLibrarian, String fotoLibrarian) {
+        Font fontRaelsa = new Font("Exo 2", Font.PLAIN, 60);
+
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setSize(1920, 1080);
+        frame.setTitle("Raelsa Library Dashboard");
+        frame.setLocationRelativeTo(null);
+
+        JPanel panelUtama = new JPanel();
+        panelUtama.setPreferredSize(new Dimension(1920, 1030));
+        panelUtama.setBackground(new Color(255, 255, 255));
+        frame.add(panelUtama);
+
+        JPanel panelToolBar = new JPanel(new FlowLayout());
+        panelToolBar.setBackground(new Color(255, 255, 255));
+        panelToolBar.setPreferredSize(new Dimension(400, 1005));
+        panelUtama.add(panelToolBar);
+
+        final JPanel panelSamping = new JPanel(new FlowLayout());
+        panelSamping.setBackground(new Color(255, 255, 255));
+        panelSamping.setPreferredSize(new Dimension(1920 - 420, 1005));
+        panelUtama.add(panelSamping);
+
+        JPanel panelSampingAtas = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelSampingAtas.setPreferredSize(new Dimension(1920 - 420, 100));
+        panelSampingAtas.setBackground(new Color(255, 255, 255));
+        panelSamping.add(panelSampingAtas);
+
+        JPanel panelSampingKanan = new JPanel(new FlowLayout());
+        panelSampingKanan.setPreferredSize(new Dimension(1920 - 420, 900));
+        panelSampingKanan.setBackground(new Color(255, 255, 255));
+        panelSamping.add(panelSampingKanan);
+
+        ImageIcon iconGaris = new ImageIcon("C:\\LinWin\\projects\\java\\workspace\\TugasPerpustakaan\\garis.jpg");
+
+        JLabel gambarGaris = new JLabel();
+        gambarGaris.setIcon(iconGaris);
+        gambarGaris.setPreferredSize(new Dimension(1470, 1));
+        panelSampingKanan.add(gambarGaris);
+
+        final JLabel labelKodeBuku = new JLabel("Masukkan kode buku : ");
+        labelKodeBuku.setFont(new Font("FiraCode Nerd Font Mono", Font.PLAIN, 20));
+        labelKodeBuku.setBounds(15, 10 + 15, 300, 30);
+
+        final JTextField fieldKodeBuku = new JTextField();
+        fieldKodeBuku.setBounds(270, 10 + 15, 250, 30);
+        fieldKodeBuku.setFont(new Font("FiraCode Nerd Font Mono", Font.PLAIN, 17));
+
+        JPanel panelSampingKananAtas = new JPanel(null);
+        panelSampingKananAtas.setPreferredSize(new Dimension(1920 - 420, 55));
+        panelSampingKananAtas.add(labelKodeBuku);
+        panelSampingKananAtas.add(fieldKodeBuku);
+        panelSampingKananAtas.setBackground(new Color(255, 255, 255));
+        panelSampingKanan.add(panelSampingKananAtas);
+
+        final JLabel logoBuku = new JLabel();
+
+        ImageIcon test = new ImageIcon("C:\\Users\\Gabriel\\Desktop\\source\\fotoKosong.jpg"); 
+        double pengurang = 512.0 / (double)test.getIconHeight();
+        Image image2 = test.getImage();
+        Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH);
+        final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+        logoBuku.setIcon(gambarBuku);
+        panelSampingKanan.add(logoBuku);
+
+        JPanel panelSampingFotoBuku = new JPanel(new FlowLayout());
+        panelSampingFotoBuku.setPreferredSize(new Dimension(900, 700));
+        panelSampingFotoBuku.setOpaque(false);
+        panelSampingKanan.add(panelSampingFotoBuku);
+
+        JPanel panel1 = new JPanel();
+        panel1.setPreferredSize(new Dimension(800, 120));
+        panel1.setOpaque(false);
+        panelSampingFotoBuku.add(panel1);
+
+        JPanel panel2 = new JPanel(new FlowLayout());
+        panel2.setPreferredSize(new Dimension(210, 450));
+        panel2.setOpaque(false);
+        panelSampingFotoBuku.add(panel2);
+
+        final JPanel panel3 = new JPanel();
+        panel3.setPreferredSize(new Dimension(585, 450));
+        panel3.setOpaque(false);
+        panelSampingFotoBuku.add(panel3);
+
+        JLabel labelLogoRaelsa = new JLabel();
+        labelLogoRaelsa.setText("📕");
+        labelLogoRaelsa.setFont(new Font("FiraCode", Font.PLAIN, 70));
+        labelLogoRaelsa.setForeground(new Color(50, 94, 190));
+        panelSampingAtas.add(labelLogoRaelsa);
+
+        JLabel labelRaelsa = new JLabel("Raelsa Library", JLabel.CENTER);
+        labelRaelsa.setFont(fontRaelsa);
+        panelSampingAtas.add(labelRaelsa);
+
+        JLabel bgToolbar = new JLabel();
+        bgToolbar.setPreferredSize(new Dimension(400, 1005));
+        bgToolbar.setLayout(new FlowLayout());
+        bgToolbar.setIcon(new ImageIcon("C:\\LinWin\\projects\\java\\workspace\\TugasPerpustakaan\\bgToolbar.jpg"));
+        panelToolBar.add(bgToolbar);
+
+        JPanel panelAtasToolBar = new JPanel();
+        panelAtasToolBar.setPreferredSize(new Dimension(500, 60));
+        panelAtasToolBar.setOpaque(false);
+        bgToolbar.add(panelAtasToolBar);
+
+        ImageIcon imageIcon = new ImageIcon("C:\\LinWin\\projects\\java\\workspace\\folderFoto\\bright.png"); // assign image to a new ImageIcon
+        Image image = imageIcon.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+        ImageIcon newImageIcon = new ImageIcon(newimg);
+
+        JLabel fotoProfil = new JLabel();
+        fotoProfil.setIcon(newImageIcon);
+        bgToolbar.add(fotoProfil);
+
+        JPanel panelBawahToolbar = new JPanel();
+        panelBawahToolbar.setPreferredSize(new Dimension(500, 15));
+        panelBawahToolbar.setOpaque(false);
+        bgToolbar.add(panelBawahToolbar);
+
+        JLabel namaUser = new JLabel();
+        namaUser.setText(namaLibrarian);
+        namaUser.setFont(new Font("Maiandra GD", Font.BOLD, 30));
+        bgToolbar.add(namaUser);
+
+        JPanel panelPemisah = new JPanel();
+        panelPemisah.setPreferredSize(new Dimension(300, 300));
+        panelPemisah.setOpaque(false);
+        bgToolbar.add(panelPemisah);
+
+        final JButton tambahBuku = new JButton();
+        tambahBuku.setText("Tambah Buku");
+        tambahBuku.setBackground(new Color(50, 94, 190));
+        tambahBuku.setPreferredSize(new Dimension(300, 50));
+        tambahBuku.setFocusable(false);
+        tambahBuku.setForeground(Color.WHITE);
+        bgToolbar.add(tambahBuku);
+
+        final JButton tambahMember = new JButton();
+        tambahMember.setText("Tambah Member");
+        tambahMember.setBackground(new Color(50, 94, 190));
+        tambahMember.setPreferredSize(new Dimension(300, 50));
+        tambahMember.setFocusable(false);
+        tambahMember.setForeground(Color.WHITE);
+        bgToolbar.add(tambahMember);
+
+        final JButton infoMember = new JButton();
+        infoMember.setText("Informasi Member");
+        infoMember.setBackground(new Color(50, 94, 190));
+        infoMember.setPreferredSize(new Dimension(300, 50));
+        infoMember.setFocusable(false);
+        infoMember.setForeground(Color.WHITE);
+        bgToolbar.add(infoMember);
+
+
+        infoMember.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new InfoMember();
+                changeState();
+                frame.dispose();
+            }
+        });
+
+        final JButton logOut = new JButton();
+        logOut.setText("Logout");
+        logOut.setBackground(new Color(243, 69, 70));
+        logOut.setPreferredSize(new Dimension(300, 50));
+        logOut.setFocusable(false);
+        logOut.setForeground(Color.WHITE);
+        bgToolbar.add(logOut);
+
+        logOut.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();                
+            }
+            
+        });
+
+        tambahBuku.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == tambahBuku) {
+                    new TambahBuku();
+                }
+            }
+        });
+
+        tambahMember.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == tambahMember) {
+                    new TambahMember();
+                }
+            }
+        });
+
+        JPanel panelGapAtas = new JPanel();
+        panelGapAtas.setPreferredSize(new Dimension(900, 120));
+        panelGapAtas.setOpaque(false);
+        panelSampingFotoBuku.add(panelGapAtas);
+        
+        Font fontLabelInfo = new Font("FiraCode Nerd Font Mono", Font.PLAIN, 25);
+
+        final JLabel labelIdBuku = new JLabel     ("ID Buku      :");
+        labelIdBuku.setFont(fontLabelInfo);
+        labelIdBuku.setPreferredSize(new Dimension(210, 80));
+        panel2.add(labelIdBuku);
+
+        final JLabel labelJudulBuku = new JLabel  ();
+        labelJudulBuku.setText("Judul Buku   :");
+        labelJudulBuku.setFont(fontLabelInfo);
+        labelJudulBuku.setPreferredSize(new Dimension(210, 80));
+        panel2.add(labelJudulBuku);
+
+        final JLabel labelPenulisBuku = new JLabel("Penulis      :");
+        labelPenulisBuku.setFont(fontLabelInfo);
+        labelPenulisBuku.setPreferredSize(new Dimension(210, 80));
+        panel2.add(labelPenulisBuku);
+
+        final JLabel labelTahunTerbit = new JLabel("Tahun Terbit :");
+        labelTahunTerbit.setFont(fontLabelInfo);
+        labelTahunTerbit.setPreferredSize(new Dimension(210, 80));
+        panel2.add(labelTahunTerbit);
+
+        final JLabel labelStatusBuku = new JLabel ("Status Buku  :");
+        labelStatusBuku.setFont(fontLabelInfo);
+        labelStatusBuku.setPreferredSize(new Dimension(210, 80));
+        panel2.add(labelStatusBuku);
+
+        final JLabel labelIdOutput = new JLabel ("");
+        labelIdOutput.setFont(fontLabelInfo);
+        labelIdOutput.setPreferredSize(new Dimension(550, 80));
+        panel3.add(labelIdOutput);
+
+        final JLabel labelJudulOutput = new JLabel ("");
+        labelJudulOutput.setFont(fontLabelInfo);
+        labelJudulOutput.setPreferredSize(new Dimension(550, 80));
+        panel3.add(labelJudulOutput);
+
+        final JLabel labelPenulisOutput = new JLabel ("");
+        labelPenulisOutput.setFont(fontLabelInfo);
+        labelPenulisOutput.setPreferredSize(new Dimension(550, 80));
+        panel3.add(labelPenulisOutput);
+
+        final JLabel labelTahunOutput = new JLabel ("");
+        labelTahunOutput.setFont(fontLabelInfo);
+        labelTahunOutput.setPreferredSize(new Dimension(550, 80));
+        panel3.add(labelTahunOutput);
+
+        final JLabel labelStatusOutput = new JLabel ("");
+        labelStatusOutput.setFont(fontLabelInfo);
+        labelStatusOutput.setPreferredSize(new Dimension(550, 80));
+        panel3.add(labelStatusOutput);
+
+        final JTextField fieldId = new JTextField();
+        fieldId.setVisible(false);
+        fieldId.setFont(fontLabelInfo);
+        fieldId.setPreferredSize(new Dimension(500, 80));
+        panel3.add(fieldId);
+
+        final JTextField fieldJudul = new JTextField();
+        fieldJudul.setVisible(false);
+        fieldJudul.setFont(fontLabelInfo);
+        fieldJudul.setPreferredSize(new Dimension(500, 80));
+        panel3.add(fieldJudul);
+
+        final JTextField fieldPenulis = new JTextField();
+        fieldPenulis.setVisible(false);
+        fieldPenulis.setFont(fontLabelInfo);
+        fieldPenulis.setPreferredSize(new Dimension(500, 80));
+        panel3.add(fieldPenulis);
+
+        final JTextField fieldTahun = new JTextField();
+        fieldTahun.setVisible(false);
+        fieldTahun.setFont(fontLabelInfo);
+        fieldTahun.setPreferredSize(new Dimension(500, 80));
+        panel3.add(fieldTahun);
+
+        final JTextField fieldFoto = new JTextField();
+        fieldFoto.setVisible(false);
+        fieldFoto.setFont(fontLabelInfo);
+        fieldFoto.setPreferredSize(new Dimension(400, 80));
+        panel3.add(fieldFoto);
+
+        JPanel panelBawah = new JPanel(null);
+        panelBawah.setOpaque(false);    
+        panelBawah.setPreferredSize(new Dimension(1300, 50));
+        panelSampingKanan.add(panelBawah);
+
+        final JButton tombolOke = new JButton();
+        tombolOke.setBackground(new Color(50, 94, 190));
+        tombolOke.setForeground(Color.white);
+        tombolOke.setFocusable(false);
+        tombolOke.setVisible(false);
+        tombolOke.setText("Oke");
+        tombolOke.setFont(new Font("Arial", Font.PLAIN, 20));
+        tombolOke.setBounds(650, 0, 200, 50);
+        panelBawah.add(tombolOke);
+
+        final JButton tombolBatal = new JButton();
+        tombolBatal.setBackground(new Color(50, 94, 190));
+        tombolBatal.setForeground(Color.white);
+        tombolBatal.setFocusable(false);
+        tombolBatal.setVisible(false);
+        tombolBatal.setText("Batal");
+        tombolBatal.setFont(new Font("Arial", Font.PLAIN, 20));
+        tombolBatal.setBounds(875, 0, 200, 50);
+        panelBawah.add(tombolBatal);
+
+        final JButton tombolEditFoto = new JButton();
+        tombolEditFoto.setBackground(new Color(50, 94, 190));
+        tombolEditFoto.setPreferredSize(new Dimension(95, 80));
+        tombolEditFoto.setForeground(Color.white);
+        tombolEditFoto.setFocusable(false);
+        tombolEditFoto.setVisible(false);
+        tombolEditFoto.setText("Pilih");
+        tombolEditFoto.setFont(new Font("Arial", Font.PLAIN, 20));
+        panel3.add(tombolEditFoto);
+
+        final JFileChooser pilihFoto = new JFileChooser();
+
+        tombolEditFoto.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pilihFoto.showOpenDialog(pilihFoto);
+                pilihFoto.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                String[] namaFoto = String.valueOf(pilihFoto.getSelectedFile()).split("\\\\");
+                fieldFoto.setText(namaFoto[namaFoto.length - 1]);
+                fieldFoto.requestFocusInWindow();
+            }
+            
+        });
+
+        final JButton tombolEditMember = new JButton();
+        tombolEditMember.setBackground(new Color(50, 94, 190));
+        tombolEditMember.setBounds(750, 0, 200, 50);
+        tombolEditMember.setFocusable(false);
+        tombolEditMember.setForeground(Color.white);
+        tombolEditMember.setText("Edit Buku");
+        tombolEditMember.setFont(new Font("Arial", Font.PLAIN, 20));
+        tombolEditMember.setBounds(875, 0, 200, 50);
+        panelBawah.add(tombolEditMember);
+
+        tombolEditMember.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fieldKodeBuku.setVisible(false);
+                labelKodeBuku.setVisible(false);
+                tombolOke.setVisible(true);
+                tombolEditMember.setVisible(false);
+                tombolBatal.setVisible(true);
+                fieldId.setVisible(true);
+                fieldId.setText(temp[0]);
+                fieldJudul.setVisible(true);
+                fieldJudul.setText(temp[1]);
+                fieldPenulis.setVisible(true);
+                fieldPenulis.setText(temp[2]);
+                fieldTahun.setVisible(true);
+                fieldTahun.setText(temp[3]);
+                labelStatusBuku.setText("Foto         :");
+                if (temp[5] != null) {
+                    String[] stringTemp = temp[5].split("\\\\");
+                    fieldFoto.setText(stringTemp[stringTemp.length - 1]);
+                }
+                fieldFoto.setVisible(true);
+                tombolEditFoto.setVisible(true);
+                labelIdOutput.setVisible(false);
+                labelJudulOutput.setVisible(false);
+                labelPenulisOutput.setVisible(false);
+                labelTahunOutput.setVisible(false);
+                labelStatusOutput.setVisible(false);
+            }
+            
+        });
+
+        tombolBatal.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tombolOke.setVisible(false);
+                tombolEditMember.setVisible(true);
+                tombolBatal.setVisible(false);
+                fieldId.setVisible(false);
+                fieldId.setText("");
+                fieldJudul.setVisible(false);
+                fieldJudul.setText("");
+                fieldPenulis.setVisible(false);
+                fieldPenulis.setText("");
+                fieldTahun.setVisible(false);
+                fieldTahun.setText("");
+                labelStatusBuku.setText("Status       :");
+                fieldFoto.setVisible(false);
+                tombolEditFoto.setVisible(false);
+                fieldKodeBuku.setVisible(true);
+                labelKodeBuku.setVisible(true);
+                labelIdOutput.setVisible(true);
+                labelJudulOutput.setVisible(true);
+                labelPenulisOutput.setVisible(true);
+                labelTahunOutput.setVisible(true);
+                labelStatusOutput.setVisible(true);
+                fieldKodeBuku.requestFocusInWindow();
+            }
+            
+        });
+
+        final JLabel labelHapus = new JLabel("");
+        labelHapus.setBounds(0, 0, 500, 50);
+        labelHapus.setFont(new Font("Arial", Font.BOLD, 40));
+        labelHapus.setVisible(true);
+        labelHapus.setForeground(new Color(243, 69, 70));
+        panelBawah.add(labelHapus);
+
+        tombolOke.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File source;
+                File destination;
+               
+                if (pilihFoto.getSelectedFile() == null) {
+                    if (temp[5] != null) {
+                        editMember(fieldId.getText().toUpperCase(), fieldJudul.getText(), fieldPenulis.getText(), fieldTahun.getText(), temp[5].replace("\\", "\\\\"), temp[0]);
+                    }
+                }
+
+                else {
+                    source = new File(String.valueOf(pilihFoto.getSelectedFile()));
+
+                    String[] namaFile = String.valueOf(pilihFoto.getSelectedFile()).split("\\\\");
+                    destination = new File("C:\\Users\\Gabriel\\Desktop\\source\\" + fieldId.getText() + "." + namaFile[namaFile.length - 1].split("\\.")[1]);
+                    if (temp[5] != null) {
+                        File fotoLama = new File(temp[5]);
+                        fotoLama.delete();
+                    }
+                    editMember(fieldId.getText().toUpperCase(), fieldJudul.getText(), fieldPenulis.getText(), fieldTahun.getText(), "C:\\\\Users\\\\Gabriel\\\\Desktop\\\\source\\\\" + fieldId.getText() + "." + namaFile[namaFile.length - 1].split("\\.")[1], temp[0]);
+                    try {
+                        copyFileUsingStream(source, destination);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
+
+                String idSementara = fieldId.getText();
+                tombolOke.setVisible(false);
+                tombolEditMember.setVisible(true);
+                tombolBatal.setVisible(false);
+                fieldId.setVisible(false);
+                fieldId.setText("");
+                fieldJudul.setVisible(false);
+                fieldJudul.setText("");
+                fieldPenulis.setVisible(false);
+                fieldPenulis.setText("");
+                fieldTahun.setVisible(false);
+                fieldTahun.setText("");
+                labelStatusBuku.setText("Status       :");
+                if (temp[5] != null) {
+                    String[] stringTemp = temp[5].split("\\\\");
+                    fieldFoto.setText(stringTemp[stringTemp.length - 1]);
+                }
+                fieldFoto.setVisible(false);
+                tombolEditFoto.setVisible(false);
+                labelIdOutput.setVisible(true);
+                labelJudulOutput.setVisible(true);
+                labelPenulisOutput.setVisible(true);
+                labelTahunOutput.setVisible(true);
+                labelStatusOutput.setVisible(true);
+                labelKodeBuku.setVisible(true);
+                fieldKodeBuku.setVisible(true);
+                fieldKodeBuku.requestFocusInWindow();
+
+                if (cekBuku(idSementara)) {
+                    fieldKodeBuku.setText("");
+                    labelIdOutput.setText     (temp[0]);
+                    labelJudulOutput.setText  (temp[1]);
+                    labelPenulisOutput.setText(temp[3]);
+                    labelTahunOutput.setText(temp[2]);
+
+                    if (Integer.valueOf(temp[4]) == 0) {
+                        labelStatusOutput.setText ("Sedang Tidak Meminjam Buku");
+                    }
+
+                    else {
+                        labelStatusOutput.setText ("Meminjam Buku");
+                    }
+
+                    ImageIcon test = new ImageIcon(temp[5]); // assign image to a new ImageIcon
+                    double pengurang = 512.0 / (double)test.getIconHeight();
+                    Image image2 = test.getImage(); // transform it 
+                    Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+                    final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+
+                    logoBuku.setIcon(gambarBuku);
+                    labelHapus.setText("");
+                    
+                }
+
+                else {
+                    labelHapus.setText("Member Tidak Ditemukan");
+                    labelIdOutput.setText     ("-");
+                    labelJudulOutput.setText  ("-");
+                    labelPenulisOutput.setText("-");
+                    labelTahunOutput.setText("-");
+                    labelStatusOutput.setText ("-");
+                    fieldId.setText("");
+                }
+            }
+            
+        });
+
+
+        final JButton tombolHapusBuku = new JButton();
+        tombolHapusBuku.setBackground(new Color(243, 69, 70));
+        tombolHapusBuku.setForeground(Color.white);
+        tombolHapusBuku.setFocusable(false);
+        tombolHapusBuku.setText("Hapus Buku");
+        tombolHapusBuku.setFont(new Font("Arial", Font.PLAIN, 20));
+        tombolHapusBuku.setBounds(1100, 0, 200, 50);
+        panelBawah.add(tombolHapusBuku);
+
+        InputMap inputMap = fieldKodeBuku.getInputMap();
+        ActionMap actionMap = fieldKodeBuku.getActionMap();
+        KeyStroke delKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+
+        inputMap.put(delKeyStroke, delKeyStroke.toString());
+
+        actionMap.put(delKeyStroke.toString(), new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tombolHapusBuku.doClick();                
+            }
+            
+        });
+
+        
+
+        tombolHapusBuku.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == tombolHapusBuku) {
+                    int yesNo = JOptionPane.showConfirmDialog(null, "Kamu yakin untuk menghapus buku ini?", "Confirm Window", JOptionPane.YES_NO_OPTION);
+                    if (yesNo == 0) {
+                        if (temp[0] != null) {
+                            labelIdOutput.setText     ("-");
+                            labelJudulOutput.setText  ("-");
+                            labelTahunOutput.setText("-");
+                            labelPenulisOutput.setText("-");
+                            labelStatusOutput.setText ("-");
+                            ImageIcon test = new ImageIcon("C:\\Users\\Gabriel\\Desktop\\source\\fotoKosong.jpg"); 
+                            double pengurang = 512.0 / (double)test.getIconHeight();
+                            Image image2 = test.getImage();
+                            Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH);
+                            final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+                            logoBuku.setIcon(gambarBuku);
+                            labelHapus.setText("Buku Berhasil Dihapus");
+                            File kuhapuslahKau = new File(temp[5]);
+                            kuhapuslahKau.delete();
+                        }
+
+                        else {
+                            labelHapus.setText("Buku Gagal Dihapus");
+                        }
+                        
+                    }
+                }                
+            }
+            
+        });
+
+        frame.setVisible(true);
+        frame.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (tampilkan != 0) {
+                    new LoginDisplay();
+                }
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+            
+        });
+
+        
+
+        fieldKodeBuku.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (fieldKodeBuku.getText().length() > 4) {
+                        if (cekBuku(fieldKodeBuku.getText().substring(7))) {
+                            fieldKodeBuku.setText("");
+                            labelIdOutput.setText     (temp[0]);
+                            labelJudulOutput.setText  (temp[1]);
+                            labelTahunOutput.setText(temp[2]);
+                            labelPenulisOutput.setText(temp[3]);
+
+                            if (Integer.valueOf(temp[4]) == 0) {
+                                labelStatusOutput.setText ("Tersedia");
+                            }
+
+                            else {
+                                labelStatusOutput.setText ("Buku Sedang Dipinjam");
+                            }
+
+                            ImageIcon test = new ImageIcon(temp[5]); // assign image to a new ImageIcon
+                            double pengurang = 512.0 / (double)test.getIconHeight();
+                            Image image2 = test.getImage(); // transform it 
+                            Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+                            final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+
+                            logoBuku.setIcon(gambarBuku);
+                            labelHapus.setVisible(false);
+                        }
+    
+                        else {
+                            System.out.println("Gagal");
+                            fieldKodeBuku.setText("");
+                            labelHapus.setVisible(true);
+                            labelIdOutput.setText     ("-");
+                            labelJudulOutput.setText  ("-");
+                            labelTahunOutput.setText("-");
+                            labelPenulisOutput.setText("-");
+                            labelStatusOutput.setText ("-");
+                            ImageIcon test = new ImageIcon("C:\\Users\\Gabriel\\Desktop\\source\\fotoKosong.jpg"); 
+                            double pengurang = 512.0 / (double)test.getIconHeight();
+                            Image image2 = test.getImage();
+                            Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH);
+                            final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+                            logoBuku.setIcon(gambarBuku);
+                            labelHapus.setText("Buku Tidak Ditemukan");
+                        }
+                    }
+
+                    else {
+                        if (cekBuku(fieldKodeBuku.getText())) {
+                            fieldKodeBuku.setText("");
+                            labelIdOutput.setText     (temp[0]);
+                            labelJudulOutput.setText  (temp[1]);
+                            labelTahunOutput.setText(temp[2]);
+                            labelPenulisOutput.setText(temp[3]);
+
+                            if (Integer.valueOf(temp[4]) == 0) {
+                                labelStatusOutput.setText ("Tersedia");
+                            }
+
+                            else {
+                                labelStatusOutput.setText ("Buku Sedang Dipinjam");
+                            }
+
+                            ImageIcon test = new ImageIcon(temp[5]); // assign image to a new ImageIcon
+                            double pengurang = 512.0 / (double)test.getIconHeight();
+                            Image image2 = test.getImage(); // transform it 
+                            Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+                            final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+
+                            logoBuku.setIcon(gambarBuku);
+                            labelHapus.setVisible(false);
+
+                        }
+    
+                        else {
+                            System.out.println("Gagal");
+                            fieldKodeBuku.setText("");
+                            labelHapus.setText("Buku Tidak Ditemukan");
+                            labelIdOutput.setText     ("-");
+                            labelJudulOutput.setText  ("-");
+                            labelTahunOutput.setText("-");
+                            labelPenulisOutput.setText("-");
+                            labelStatusOutput.setText ("-");
+                            ImageIcon test = new ImageIcon("C:\\Users\\Gabriel\\Desktop\\source\\fotoKosong.jpg"); 
+                            double pengurang = 512.0 / (double)test.getIconHeight();
+                            Image image2 = test.getImage();
+                            Image gambarbaru = image2.getScaledInstance((int)Math.round(test.getIconWidth() * pengurang), 512, java.awt.Image.SCALE_SMOOTH);
+                            final ImageIcon gambarBuku = new ImageIcon(gambarbaru);
+                            logoBuku.setIcon(gambarBuku);
+                            labelHapus.setVisible(true);
+                        }
+                    }
+                    
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+            
+        });
+    }
+}
