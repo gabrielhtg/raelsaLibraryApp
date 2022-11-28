@@ -96,6 +96,8 @@ public class HomeDisplay {
     KeyStroke delKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
     JLabel labelPinjam1 = new JLabel();
     JLabel labelPinjam2 = new JLabel();
+    JPanel panelPemisahbaru = new JPanel();
+    JPanel panelSampingKananOverlap = new JPanel(new FlowLayout());
 
     String getJudul (String nim) {
         String sql = String.format("select * from pinjam where nim = '%s'", nim);
@@ -321,6 +323,13 @@ public class HomeDisplay {
     }
 
     void tampilkanInfoMember(String id) {
+        panelSampingKananOverlap.remove(labelInputID);
+        panelSampingKananOverlap.remove(fieldInputID);
+        panelSampingKananAtas.add(labelInputID);
+        fieldInputID.setBounds(325, 10 + 15, 250, 30);
+        labelInputID.setBounds(15, 10 + 15, 320, 30);
+        panelSampingKananAtas.add(fieldInputID);
+        panelSampingKananOverlap.setVisible(false);
         if (id.toLowerCase().charAt(0) == 'h') {
             if (cekBuku(id.substring(7))) {
                 tombolEdit.setText("Edit Buku");
@@ -583,8 +592,16 @@ public class HomeDisplay {
         panelSamping.add(panelSampingAtas);
 
         panelSampingKanan.setPreferredSize(new Dimension(1920 - 420, 900));
-        panelSampingKanan.setBackground(new Color(255, 255, 255));
+        panelSampingKanan.setOpaque(false);
         panelSamping.add(panelSampingKanan);
+
+        panelPemisahbaru.setPreferredSize(new Dimension(1920-420, 400));
+        panelPemisahbaru.setOpaque(false);
+
+        panelSampingKananOverlap.setPreferredSize(new Dimension(1920 - 420, 900));
+        panelSampingKanan.add(panelSampingKananOverlap);
+        panelSampingKananOverlap.setOpaque(false);
+        panelSampingKananOverlap.add(panelPemisahbaru);
 
         gambarGaris.setIcon(iconGaris);
         gambarGaris.setPreferredSize(new Dimension(1470, 1));
@@ -600,8 +617,7 @@ public class HomeDisplay {
         fieldInputID.setFont(new Font("FiraCode Nerd Font Mono", Font.PLAIN, 17));
 
         panelSampingKananAtas.setPreferredSize(new Dimension(1920 - 420, 55));
-        panelSampingKananAtas.add(labelInputID);
-        panelSampingKananAtas.add(fieldInputID);
+        
         panelSampingKananAtas.setBackground(new Color(255, 255, 255));
         panelSampingKanan.add(panelSampingKananAtas);
 
@@ -870,6 +886,10 @@ public class HomeDisplay {
         tombolPinjam.setFont(new Font("Arial", Font.PLAIN, 20));
         tombolPinjam.setBounds(690, 0, 200, 50);
         panelBawah.add(tombolPinjam);
+
+        fieldInputID.setPreferredSize(new Dimension(250, 30));
+        panelSampingKananOverlap.add(labelInputID);
+        panelSampingKananOverlap.add(fieldInputID);
 
         tombolPinjam.addActionListener(new ActionListener() {
 
@@ -1446,6 +1466,7 @@ public class HomeDisplay {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     tampilkanInfoMember(fieldInputID.getText());
+                    fieldInputID.requestFocusInWindow();
                 }
             }
 
