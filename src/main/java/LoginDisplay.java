@@ -250,7 +250,7 @@ public class LoginDisplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == tombolLogin) {
-                    if (cekUSer(fieldUsername.getText(), foto)) {
+                    if (cekUSer(fieldUsername.getText(), String.valueOf(fieldPassword.getPassword()))) {
                         new HomeDisplay(nama, foto);
                         frame.dispose();
                     }
