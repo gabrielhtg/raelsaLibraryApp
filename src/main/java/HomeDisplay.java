@@ -19,8 +19,6 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-
-import javax.print.DocFlavor.STRING;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -33,8 +31,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-
-import com.mysql.cj.protocol.Resultset;
 
 public class HomeDisplay {
     public JFrame frame = new JFrame();
