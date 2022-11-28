@@ -616,7 +616,7 @@ public class HomeDisplay {
         panelSampingFotoBuku.add(panel1);
 
         panel2.setPreferredSize(new Dimension(210, 450));
-        // panel2.setOpaque(false);
+        panel2.setOpaque(false);
         panelSampingFotoBuku.add(panel2);
 
         panel3.setPreferredSize(new Dimension(650, 450));
