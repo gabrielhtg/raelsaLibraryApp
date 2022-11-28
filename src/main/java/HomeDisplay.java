@@ -568,7 +568,7 @@ public class HomeDisplay {
         }
     }
 
-    HomeDisplay (String namaLibrarian, String fotoLibrarian) {
+    HomeDisplay (String namaLibrarian, final String fotoLibrarian) {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(1920, 1080);
@@ -657,7 +657,7 @@ public class HomeDisplay {
         panelAtasToolBar.setOpaque(false);
         bgToolbar.add(panelAtasToolBar);
 
-        fotoProfil.setIcon(changeSize("folderFoto\\bright.png", 200));
+        fotoProfil.setIcon(changeSize(fotoLibrarian, 200));
         bgToolbar.add(fotoProfil);
         
         panelBawahToolbar.setPreferredSize(new Dimension(500, 15));
@@ -1400,7 +1400,7 @@ public class HomeDisplay {
                             labelStatusOutput.setText   ("-");
                             labelHapus.setText("Member Berhasil Dihapus");
                             
-                            logoBuku.setIcon(changeSize("folderFoto\\bright.png", 512));
+                            logoBuku.setIcon(changeSize(fotoLibrarian, 512));
                         }
                     }
                 }                

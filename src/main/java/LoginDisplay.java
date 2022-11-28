@@ -16,10 +16,10 @@ public class LoginDisplay {
     private JPanel panelSampingTombolLogin = new JPanel();
     private JLabel labelGagal = new JLabel();
     private String nama;
+    private String foto;
     
     boolean cekUSer (String username, String password) {
         String sql = "select * from librarian where username = '" + username + "'" + " collate utf8mb4_bin";
-        // String sql = "select * from librarian where username = '" + username + "'";
         
         try {
             Database databaseRaelsa = new Database();
@@ -28,6 +28,7 @@ public class LoginDisplay {
             
             if (password.equals(result.getString("pass"))) {
                 nama = result.getString("nama");
+                foto = result.getString("foto");
                 databaseRaelsa.koneksi.close();
                 return true;
             }
@@ -249,8 +250,8 @@ public class LoginDisplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == tombolLogin) {
-                    if (cekUSer(fieldUsername.getText(), String.valueOf(fieldPassword.getPassword()))) {
-                        new HomeDisplay(nama, String.valueOf(fieldPassword.getPassword()));
+                    if (cekUSer(fieldUsername.getText(), foto)) {
+                        new HomeDisplay(nama, foto);
                         frame.dispose();
                     }
 
