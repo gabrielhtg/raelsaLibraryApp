@@ -41,7 +41,7 @@ public class HomeDisplay {
     JPanel panelSamping = new JPanel(new FlowLayout());
     JPanel panelSampingAtas = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JPanel panelSampingKanan = new JPanel(new FlowLayout());
-    ImageIcon iconGaris = new ImageIcon("C:\\LinWin\\projects\\java\\workspace\\TugasPerpustakaan\\garis.jpg");
+    ImageIcon iconGaris = new ImageIcon("garis.jpg");
     JLabel gambarGaris = new JLabel();
     JLabel labelInputID = new JLabel("Masukkan id buku/member : "); // ini adalah label untuk input id member ataupun buku
     JTextField fieldInputID = new JTextField(); // field untuk input id
@@ -633,14 +633,14 @@ public class HomeDisplay {
 
         bgToolbar.setPreferredSize(new Dimension(400, 1005));
         bgToolbar.setLayout(new FlowLayout());
-        bgToolbar.setIcon(new ImageIcon("C:\\LinWin\\projects\\java\\workspace\\TugasPerpustakaan\\bgToolbar.jpg"));
+        bgToolbar.setIcon(new ImageIcon("bgToolbar.jpg"));
         panelToolBar.add(bgToolbar);
 
         panelAtasToolBar.setPreferredSize(new Dimension(500, 60));
         panelAtasToolBar.setOpaque(false);
         bgToolbar.add(panelAtasToolBar);
 
-        fotoProfil.setIcon(changeSize("C:\\LinWin\\projects\\java\\workspace\\folderFoto\\bright.png", 200));
+        fotoProfil.setIcon(changeSize("folderFoto\\bright.png", 200));
         bgToolbar.add(fotoProfil);
         
         panelBawahToolbar.setPreferredSize(new Dimension(500, 15));
@@ -1391,7 +1391,7 @@ public class HomeDisplay {
                             labelStatusOutput.setText   ("-");
                             labelHapus.setText("Member Berhasil Dihapus");
                             
-                            logoBuku.setIcon(changeSize("C:\\LinWin\\projects\\java\\workspace\\folderFoto\\bright.png", 512));
+                            logoBuku.setIcon(changeSize("folderFoto\\bright.png", 512));
                         }
                     }
                 }                
