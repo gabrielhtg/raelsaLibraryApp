@@ -59,6 +59,7 @@ public class HomeDisplay {
     JLabel fotoProfil = new JLabel();
     JPanel panelBawahToolbar = new JPanel();
     JLabel namaUser = new JLabel();
+    JLabel labelTambahan = new JLabel();
     JPanel panelPemisah = new JPanel();
     JButton tambahBuku = new JButton();
     JButton tambahMember = new JButton();
@@ -755,7 +756,6 @@ public class HomeDisplay {
         labelStatusOutput.setPreferredSize(new Dimension(550, 80));
         panel3.add(labelStatusOutput);
 
-        JLabel labelTambahan = new JLabel();
         labelTambahan.setFont(fontLabelInfo);
         labelTambahan.setLayout(null);
         labelTambahan.setPreferredSize(new Dimension(550, 80));
@@ -998,6 +998,7 @@ public class HomeDisplay {
                 labelInputID.setVisible(false);
                 tombolOke.setVisible(true);
                 tombolEdit.setVisible(false);
+                labelTambahan.setVisible(false);
                 tombolBatal.setVisible(true);
                 fieldId.setVisible(true);
                 fieldId.setText(temp[0]);
