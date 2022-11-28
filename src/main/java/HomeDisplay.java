@@ -897,39 +897,43 @@ public class HomeDisplay {
             public void actionPerformed(ActionEvent e) {
                 if (labelIdOutput.getText().toLowerCase().charAt(0) == 'b') { // ketika id buku diimulai dari b
                     // if (temp[4].equals("0")) {
-                        if (pinjamkanBuku(labelIdOutput.getText(), JOptionPane.showInputDialog("Masukkan ID Member"))) {
-                            labelHapus.setForeground(Color.GREEN);
-                            labelHapus.setBounds(0, 0, 600, 50);
-                            labelHapus.setText("Berhasil meminjamkan buku");
-                            tampilkanInfoMember(labelIdOutput.getText());
-                            labelHapus.setVisible(true);
-                        // }
+                        String sementara = JOptionPane.showInputDialog("Masukkan ID Member");
+                        
+                        if (sementara.charAt(0) == 'b') {
+                            if (pinjamkanBuku(labelIdOutput.getText(), sementara)) {
+                                labelHapus.setForeground(Color.GREEN);
+                                labelHapus.setBounds(0, 0, 600, 50);
+                                labelHapus.setText("Berhasil meminjamkan buku");
+                                tampilkanInfoMember(labelIdOutput.getText());
+                                labelHapus.setVisible(true);
+                            }
+        
+                            // else {
+                            //     labelHapus.setForeground(merah);
+                            //     labelHapus.setBounds(0, 0, 600, 50);
+                            //     labelHapus.setText("Gagal meminjamkan buku");
+                            //     labelHapus.setVisible(true);
+                            // }
+                        }
     
-                        // else {
-                        //     labelHapus.setForeground(merah);
-                        //     labelHapus.setBounds(0, 0, 600, 50);
-                        //     labelHapus.setText("Gagal meminjamkan buku");
-                        //     labelHapus.setVisible(true);
-                        // }
-                    }
-
-                    // else {
-                    //     if (hapusPinjamkanBuku(labelIdOutput.getText(), JOptionPane.showInputDialog("Masukkan ID Member"))) {
-                    //         labelHapus.setForeground(Color.GREEN);
-                    //         labelHapus.setBounds(0, 0, 600, 50);
-                    //         labelHapus.setText("Buku telah buku");
-                    //         tampilkanInfoMember(labelIdOutput.getText());
-                    //         labelHapus.setVisible(true);
-                    //     }
-    
-                    //     else {
-                    //         labelHapus.setForeground(merah);
-                    //         labelHapus.setBounds(0, 0, 600, 50);
-                    //         labelHapus.setText("Gagal meminjamkan buku");
-                    //         labelHapus.setVisible(true);
-                    //     }
-                    // }
+                        else {
+                            if (pinjamkanBuku(labelIdOutput.getText(), sementara.substring(7))) {
+                                labelHapus.setForeground(Color.GREEN);
+                                labelHapus.setBounds(0, 0, 600, 50);
+                                labelHapus.setText("Berhasil meminjamkan buku");
+                                tampilkanInfoMember(labelIdOutput.getText());
+                                labelHapus.setVisible(true);
+                            }
+        
+                            // else {
+                            //     labelHapus.setForeground(merah);
+                            //     labelHapus.setBounds(0, 0, 600, 50);
+                            //     labelHapus.setText("Gagal meminjamkan buku");
+                            //     labelHapus.setVisible(true);
+                            // }
+                        }
                 }
+                        
 
                 else {
                     
