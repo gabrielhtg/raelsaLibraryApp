@@ -896,42 +896,24 @@ public class HomeDisplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (labelIdOutput.getText().toLowerCase().charAt(0) == 'b') { // ketika id buku diimulai dari b
-                    // if (temp[4].equals("0")) {
+                    if (temp[4].equals("0")) {
                         String sementara = JOptionPane.showInputDialog("Masukkan ID Member");
-                        
-                        if (sementara.charAt(0) == 'b') {
-                            if (pinjamkanBuku(labelIdOutput.getText(), sementara)) {
-                                labelHapus.setForeground(Color.GREEN);
-                                labelHapus.setBounds(0, 0, 600, 50);
-                                labelHapus.setText("Berhasil meminjamkan buku");
-                                tampilkanInfoMember(labelIdOutput.getText());
-                                labelHapus.setVisible(true);
-                            }
-        
-                            // else {
-                            //     labelHapus.setForeground(merah);
-                            //     labelHapus.setBounds(0, 0, 600, 50);
-                            //     labelHapus.setText("Gagal meminjamkan buku");
-                            //     labelHapus.setVisible(true);
-                            // }
+
+                        if (pinjamkanBuku(labelIdOutput.getText(), sementara)) {
+                            labelHapus.setForeground(Color.GREEN);
+                            labelHapus.setBounds(0, 0, 600, 50);
+                            labelHapus.setText("Berhasil meminjamkan buku");
+                            tampilkanInfoMember(labelIdOutput.getText());
+                            labelHapus.setVisible(true);
                         }
     
                         else {
-                            if (pinjamkanBuku(labelIdOutput.getText(), sementara.substring(7))) {
-                                labelHapus.setForeground(Color.GREEN);
-                                labelHapus.setBounds(0, 0, 600, 50);
-                                labelHapus.setText("Berhasil meminjamkan buku");
-                                tampilkanInfoMember(labelIdOutput.getText());
-                                labelHapus.setVisible(true);
-                            }
-        
-                            // else {
-                            //     labelHapus.setForeground(merah);
-                            //     labelHapus.setBounds(0, 0, 600, 50);
-                            //     labelHapus.setText("Gagal meminjamkan buku");
-                            //     labelHapus.setVisible(true);
-                            // }
+                            labelHapus.setForeground(merah);
+                            labelHapus.setBounds(0, 0, 600, 50);
+                            labelHapus.setText("Gagal meminjamkan buku");
+                            labelHapus.setVisible(true);
                         }
+                    }
                 }
                         
 
@@ -992,10 +974,11 @@ public class HomeDisplay {
                         }
     
                         else { // untuk input book_id http
-                            if (pinjamkanBuku(sementara.substring(7), labelIdOutput.getText())) { 
+                            if (hapusPinjamkanBuku(sementara.substring(7), labelIdOutput.getText())) { 
                                 labelHapus.setForeground(Color.GREEN);
                                 labelHapus.setBounds(0, 0, 600, 50);
-                                labelHapus.setText("Berhasil meminjamkan buku");
+                                labelHapus.setText("Buku Berhasil Dikembalikan");
+                                tampilkanInfoMember(labelIdOutput.getText());
                                 labelHapus.setVisible(true);
                             }
         
