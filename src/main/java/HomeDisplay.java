@@ -18,6 +18,9 @@ import java.io.OutputStream;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+
+import javax.print.DocFlavor.STRING;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -30,6 +33,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+
+import com.mysql.cj.protocol.Resultset;
 
 public class HomeDisplay {
     public JFrame frame = new JFrame();
@@ -107,14 +112,14 @@ public class HomeDisplay {
             ResultSet rs = dataRaelsa.perintah.executeQuery(sql);
             rs.next();
             String book_id = rs.getString("book_id");
-            Date tglPeminjaman = rs.getDate("waktuPinjam");
+            // Date tglPeminjaman = rs.getDate("waktuPinjam");
 
             sql = String.format("select judul from book where book_id = '%s'", book_id);
             ResultSet rs2 = dataRaelsa.perintah.executeQuery(sql);
             rs2.next();
             String judul = rs2.getString("judul");
-
-            return String.format("%s(%s) D: %s", judul, book_id.toUpperCase(), tglPeminjaman.toString());
+            
+            return String.format("%s (%s)", judul, book_id.toUpperCase());
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -160,21 +165,40 @@ public class HomeDisplay {
     }
 
     boolean pinjamkanBuku (String book_id, String nim) {
-        String query = String.format("insert into pinjam (book_id, nim) value ('%s', '%s')", book_id, nim);
-        String sql2 = String.format("update member set status = 1 where nim = '%s'", nim);
-        String sql3 = String.format("update book set status = 1 where book_id = '%s'", book_id);
-
+        String query = String.format("insert into pinjam (book_id, nim, waktuKembali) value ('%s', '%s', '%s')", book_id, nim, LocalDate.now().plusDays(3));
+        String sql1 = String.format("select count(%s) from pinjam;", nim);
+        int count = 0;
+        
         try {
             Database dataRaelsa = new Database();
-            dataRaelsa.perintah.executeUpdate(query);
-            dataRaelsa.perintah.executeUpdate(sql2);
-            dataRaelsa.perintah.executeUpdate(sql3);
+            ResultSet rs = dataRaelsa.perintah.executeQuery(sql1);
+            rs.next();
+            count = rs.getInt("count(nim)");
             dataRaelsa.koneksi.close();
-            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+        }
+
+        if (count != 0) {
+            String sql2 = String.format("update member set status = 1 where nim = '%s'", nim);
+            String sql3 = String.format("update book set status = 1 where book_id = '%s'", book_id);
+
+            try {
+                Database dataRaelsa = new Database();
+                dataRaelsa.perintah.executeUpdate(query);
+                dataRaelsa.perintah.executeUpdate(sql2);
+                dataRaelsa.perintah.executeUpdate(sql3);
+                dataRaelsa.koneksi.close();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        
+        else {
             return false;
         }
+        
     }
 
     boolean hapusPinjamkanBuku (String book_id, String nim) {
@@ -505,6 +529,10 @@ public class HomeDisplay {
                 labelJudulBuku.setText("Nama         :");
                 labelTahunTerbit.setText("Angkatan     :");
                 labelPenulisBuku.setText("Prodi        :");
+                panel1.setPreferredSize(new Dimension(800, 120));
+                panel2.setPreferredSize(new Dimension(210, 450));
+                panel3.setPreferredSize(new Dimension(650, 450));
+                tombolInfoPeminjam.setVisible(false);
                 labelStatusBuku.setText("Meminjam     :");
                 labelIdBuku.setVisible(true);
                 labelJudulBuku.setVisible(true);
@@ -789,7 +817,7 @@ public class HomeDisplay {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Detail();
+                new Detail(labelIdOutput.getText());
             }
             
         });
