@@ -943,6 +943,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(Color.GREEN);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Berhasil meminjamkan buku");
+                                tampilkanInfoMember(labelIdOutput.getText());
                                 labelHapus.setVisible(true);
                             }
         
