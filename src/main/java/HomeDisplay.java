@@ -29,8 +29,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.table.DefaultTableModel;
 
 public class HomeDisplay {
     public JFrame frame = new JFrame();
@@ -40,7 +43,7 @@ public class HomeDisplay {
     JPanel panelUtama = new JPanel(); // ini merupakan panel pada layer paling bawah
     JPanel panelToolBar = new JPanel(new FlowLayout());
     JPanel panelSamping = new JPanel(new FlowLayout());
-    JPanel panelSampingAtas = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JPanel panelSampingAtas = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel panelSampingKanan = new JPanel(new FlowLayout());
     ImageIcon iconGaris = new ImageIcon("garis.jpg");
     JLabel gambarGaris = new JLabel();
@@ -99,6 +102,10 @@ public class HomeDisplay {
     JLabel labelPinjam2 = new JLabel();
     JPanel panelPemisahbaru = new JPanel();
     JPanel panelSampingKananOverlap = new JPanel(new FlowLayout());
+    JScrollPane scrollPane = new JScrollPane();
+    JTable table = new JTable();
+    DefaultTableModel tableModel = new DefaultTableModel();
+    String[] dataUser = new String[2];
 
     String getJudul (String nim) {
         String sql = String.format("select * from pinjam where nim = '%s'", nim);
@@ -146,12 +153,9 @@ public class HomeDisplay {
 
     ImageIcon changeSize (String lokasiFoto, int ukuranTujuan) {
         ImageIcon test = new ImageIcon(lokasiFoto); 
-        // System.out.printf("Ukuran awal : %d, %d\n", test.getIconWidth(), test.getIconHeight());
         double pengurang = (double)ukuranTujuan / (double)test.getIconHeight();
-        // System.out.printf("Pengurang : %f\n", pengurang);
         Image image2 = test.getImage();
         Image gambarbaru = image2.getScaledInstance((int) Math.round(test.getIconWidth() * pengurang), ukuranTujuan, java.awt.Image.SCALE_SMOOTH);
-        // System.out.printf("Ukuran akhir : %d, %d\n", Math.round(test.getIconWidth() * pengurang), ukuranTujuan);
         ImageIcon gambarBuku = new ImageIcon(gambarbaru);
         return gambarBuku;
     }
@@ -206,7 +210,6 @@ public class HomeDisplay {
             ResultSet rs = dataRaelsa.perintah.executeQuery(sql1);
             rs.next();
             String temp = rs.getString("book_id");
-            System.out.println(book_id);
 
             if (temp.toLowerCase().equals(book_id.toLowerCase())) {
                 String query = String.format("delete from pinjam where book_id = '%s' and nim ='%s'", temp, nim);
@@ -258,7 +261,7 @@ public class HomeDisplay {
             dataRaelsa.koneksi.close();
 
         } catch (SQLException e) {
-            System.out.println("Gagal menghapus member.");
+            e.getSQLState();
         }
     }
 
@@ -296,7 +299,6 @@ public class HomeDisplay {
 
     boolean editMember (String idBaru, String nama, String prodi, String angkatan, String foto, String idLama) {
         String sql = String.format("update member set nim = '%s', nama = '%s', prodi = '%s', angkatan = '%s', foto = '%s' where nim = '%s'", idBaru, nama, prodi, angkatan, foto, idLama);
-        System.out.println(foto);
 
         try {
             Database dataRaelsa = new Database();
@@ -693,9 +695,70 @@ public class HomeDisplay {
         namaUser.setFont(new Font("Maiandra GD", Font.BOLD, 30));
         bgToolbar.add(namaUser);
 
-        panelPemisah.setPreferredSize(new Dimension(300, 450));
-        panelPemisah.setOpaque(false);
-        bgToolbar.add(panelPemisah);
+        JPanel panelPemisah1 = new JPanel();
+        panelPemisah1.setPreferredSize(new Dimension(370, 30));
+        panelPemisah1.setOpaque(false);
+        bgToolbar.add(panelPemisah1);
+
+        scrollPane.setPreferredSize(new Dimension(370, 450 - 45));
+        bgToolbar.add(scrollPane);
+        scrollPane.setViewportView(table);
+
+        JPanel panelPemisah2 = new JPanel();
+        panelPemisah2.setPreferredSize(new Dimension(370, 30));
+        panelPemisah2.setOpaque(false);
+        bgToolbar.add(panelPemisah2);
+
+        //! tambahkan tabel disini
+
+        
+        
+        Thread alwaysCek = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                while (true) {
+                    tableModel = new DefaultTableModel();
+
+                    table.setModel(tableModel);
+                    tableModel.addColumn("NIM");
+                    tableModel.addColumn("Time");
+                    table.setRowHeight(20);
+                    table.setBackground(Color.white); 
+                    table.getColumnModel().getColumn(0).setMaxWidth(100);
+                    table.getColumnModel().getColumn(0).setPreferredWidth(150);
+
+                    Database dataRaelsa = new Database();
+
+                    String sql3 = String.format("select nim, time from logperpus");
+    
+                    try {
+                        ResultSet rs = dataRaelsa.perintah.executeQuery(sql3);
+                        
+                        while (rs.next()) {
+                            dataUser[0] = rs.getString("nim");
+                            dataUser[1] = rs.getString("time");
+                            tableModel.insertRow(0, dataUser);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+    
+                    try {
+                        dataRaelsa.koneksi.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        alwaysCek.start();
         
         tambahBuku.setText("Tambah Buku");
         tambahBuku.setBackground(new Color(50, 94, 190));
@@ -1335,7 +1398,7 @@ public class HomeDisplay {
                                 }
 
                                 logoBuku.setIcon(changeSize(temp[5].replace("\\", "\\\\"), 512));
-                                System.out.println(temp[5]);
+                                // System.out.println(temp[5]);
                             }
                         }
 

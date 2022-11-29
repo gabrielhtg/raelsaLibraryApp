@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,7 +22,6 @@ import javax.swing.table.DefaultTableModel;
 public class LogPerpus {
     private JFrame frame = new JFrame();
     private String[] dataUser = new String[5];
-    // private String[] dataTabel = new String[6];
     private Font fontRaelsa = new Font("Exo 2", Font.PLAIN, 60);
     private JPanel panelUtama = new JPanel();
     private JPanel panelAtas = new JPanel(new FlowLayout());
@@ -39,9 +36,12 @@ public class LogPerpus {
     private JLabel labelLogoRaelsa = new JLabel();
     private JLabel labelRaelsa = new JLabel("Raelsa Library", JLabel.CENTER);
     private JScrollPane scrollPane = new JScrollPane();
+    private Color merah = new Color(243, 69, 70);
     private JTable table = new JTable();
     private DefaultTableModel tableModel = new DefaultTableModel();
     private DateTimeFormatter formatWaktu = DateTimeFormatter.ofPattern("EEEE, dd LLLL yyyy | hh:mm:ss a");
+    private Font fontLabelInfo = new Font("FiraCode Nerd Font Mono", Font.PLAIN, 25);
+    private JLabel labelError = new JLabel();
 
     void masukkanLog (String nim) {
         String sql = String.format("select * from member where nim = '%s'", nim);
@@ -56,8 +56,10 @@ public class LogPerpus {
             dataUser[3] = rs.getString("angkatan");
             dataUser[4] = LocalDateTime.now().format(formatWaktu);
             tableModel.insertRow(0, dataUser);
+            labelError.setVisible(false);
         } catch (SQLException e) {
-
+            labelError.setVisible(true);
+            e.printStackTrace();
         }
 
         String sql2 = String.format("insert into logperpus (nim, nama, prodi, angkatan, time) value ('%s', '%s', '%s', '%s', '%s');", dataUser[0], dataUser[1], dataUser[2], dataUser[3], dataUser[4]);
@@ -65,10 +67,8 @@ public class LogPerpus {
         try {
             dataRaelsa.perintah.execute(sql2);
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
-
-        
     }
 
     LogPerpus() {
@@ -116,6 +116,13 @@ public class LogPerpus {
         panelInputID.add(fieldIdMember);
         panelInputID.setOpaque(false);
         panelBawah.add(panelInputID);
+        
+        labelError.setText("ID Tidak Ditemukan");
+        labelError.setFont(fontLabelInfo);
+        labelError.setForeground(merah);
+        labelError.setVisible(false);
+        labelError.setBounds(270 + 260, 10 + 15, 300, 30);
+        panelInputID.add(labelError);
 
         panelTengah.setPreferredSize(new Dimension(1920 - 420, 50));
         panelTengah.setOpaque(false);
@@ -161,7 +168,6 @@ public class LogPerpus {
                 dataUser[3] = rs.getString("angkatan");
                 dataUser[4] = rs.getString("time");
                 tableModel.insertRow(0, dataUser);
-                System.out.println(Arrays.toString(dataUser));
             }
         } catch (SQLException e) {
             e.printStackTrace();
