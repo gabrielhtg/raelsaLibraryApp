@@ -3,7 +3,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +16,7 @@ public class LoginDisplay {
     private JLabel labelGagal = new JLabel();
     private String nama;
     private String foto;
+    // private String[] temp = new String[2];
     
     boolean cekUSer (String username, String password) {
         String sql = "select * from librarian where username = '" + username + "'" + " collate utf8mb4_bin";
@@ -43,6 +43,11 @@ public class LoginDisplay {
     }
 
     LoginDisplay () {
+        // Database dataRaelsa = new Database();
+
+        // Sql
+
+        // ResultSet rs = dataRaelsa.perintah.executeQuery()
         ImageIcon logoFrame = new ImageIcon("logo.png");
 
         final JFrame frame = new JFrame();

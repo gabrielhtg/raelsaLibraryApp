@@ -747,6 +747,8 @@ public class HomeDisplay {
                         e.printStackTrace();
                     }
 
+                    fieldInputID.requestFocusInWindow();
+
                     try {
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
@@ -974,6 +976,7 @@ public class HomeDisplay {
         panelBawah.add(tombolPinjam);
 
         fieldInputID.setPreferredSize(new Dimension(250, 30));
+        fieldInputID.requestFocusInWindow();
         panelSampingKananOverlap.add(labelInputID);
         panelSampingKananOverlap.add(fieldInputID);
 
