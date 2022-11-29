@@ -76,7 +76,7 @@ public class LogPerpus {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(1920, 1080);
-        frame.setTitle("Raelsa Library Dashboard");
+        frame.setTitle("Log Perpustakaan Raelsa");
         frame.setLocationRelativeTo(null);
 
         panelUtama.setPreferredSize(new Dimension(1920, 1030));

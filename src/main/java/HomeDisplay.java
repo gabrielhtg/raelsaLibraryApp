@@ -711,8 +711,6 @@ public class HomeDisplay {
 
         //! tambahkan tabel disini
 
-        
-        
         Thread alwaysCek = new Thread(new Runnable(){
             @Override
             public void run() {
