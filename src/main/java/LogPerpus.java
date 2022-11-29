@@ -9,6 +9,8 @@ import java.awt.event.WindowListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -39,6 +41,7 @@ public class LogPerpus {
     private JScrollPane scrollPane = new JScrollPane();
     private JTable table = new JTable();
     private DefaultTableModel tableModel = new DefaultTableModel();
+    private DateTimeFormatter formatWaktu = DateTimeFormatter.ofPattern("EEEE, dd LLLL yyyy | hh:mm:ss a");
 
     void masukkanLog (String nim) {
         String sql = String.format("select * from member where nim = '%s'", nim);
@@ -51,8 +54,8 @@ public class LogPerpus {
             dataUser[1] = rs.getString("nama");
             dataUser[2] = rs.getString("prodi");
             dataUser[3] = rs.getString("angkatan");
-            dataUser[4] = LocalDateTime.now().toString();
-            tableModel.addRow(dataUser);
+            dataUser[4] = LocalDateTime.now().format(formatWaktu);
+            tableModel.insertRow(0, dataUser);
         } catch (SQLException e) {
 
         }
@@ -69,30 +72,7 @@ public class LogPerpus {
     }
 
     LogPerpus() {
-        Database dataRaelsa = new Database();
-
-        String sql3 = String.format("select * from logperpus");
-
-        try {
-            ResultSet rs = dataRaelsa.perintah.executeQuery(sql3);
-            
-            while (rs.next()) {
-                dataUser[0] = rs.getString("nim");
-                dataUser[1] = rs.getString("nama");
-                dataUser[2] = rs.getString("prodi");
-                dataUser[3] = rs.getString("angkatan");
-                dataUser[4] = rs.getString("time");
-                tableModel.addRow(dataUser);
-            }
-        } catch (SQLException e) {
-
-        }
-
-        try {
-            dataRaelsa.koneksi.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(1920, 1080);
@@ -164,8 +144,34 @@ public class LogPerpus {
         tableModel.addColumn("Prodi");
         tableModel.addColumn("Angkatan");
         tableModel.addColumn("Time");
-        table.setRowHeight(10);
+        table.setRowHeight(20);
         table.setBackground(Color.white);
+
+        Database dataRaelsa = new Database();
+
+        String sql3 = String.format("select * from logperpus");
+
+        try {
+            ResultSet rs = dataRaelsa.perintah.executeQuery(sql3);
+            
+            while (rs.next()) {
+                dataUser[0] = rs.getString("nim");
+                dataUser[1] = rs.getString("nama");
+                dataUser[2] = rs.getString("prodi");
+                dataUser[3] = rs.getString("angkatan");
+                dataUser[4] = rs.getString("time");
+                tableModel.insertRow(0, dataUser);
+                System.out.println(Arrays.toString(dataUser));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dataRaelsa.koneksi.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         frame.setVisible(true);
 
@@ -181,7 +187,7 @@ public class LogPerpus {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                new HomeDisplay("Gabriel", "ganteng");
+                // new HomeDisplay("Gabriel", "ganteng");
             }
 
             @Override

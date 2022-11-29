@@ -172,9 +172,10 @@ public class HomeDisplay {
             count = rs.getInt("count(nim)");
             dataRaelsa.koneksi.close();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        if (count != 0) {
+        if (count == 0) {
             String sql2 = String.format("update member set status = 1 where nim = '%s'", nim);
             String sql3 = String.format("update book set status = 1 where book_id = '%s'", book_id);
 
@@ -396,6 +397,7 @@ public class HomeDisplay {
         
                 logoBuku.setIcon(changeSize(temp[5], 512));
                 labelHapus.setVisible(false);
+                labelHapus.setText("");
             }
         
             else {
@@ -476,7 +478,7 @@ public class HomeDisplay {
         
                 logoBuku.setIcon(changeSize(temp[5], 512));
                 labelHapus.setVisible(false);
-        
+                labelHapus.setText("");
             }
         
             else {
@@ -555,8 +557,7 @@ public class HomeDisplay {
                 }
         
                 logoBuku.setIcon(changeSize(temp[5], 512));
-                // labelHapus.setText("");
-                
+                labelHapus.setText("");
             }
         
             else {
@@ -933,8 +934,8 @@ public class HomeDisplay {
     
                         else {
                             labelHapus.setForeground(merah);
-                            labelHapus.setBounds(0, 0, 600, 50);
-                            labelHapus.setText("Gagal meminjamkan buku");
+                            labelHapus.setBounds(0, 0, 630, 50);
+                            labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
                             labelHapus.setVisible(true);
                         }
                     }
@@ -956,8 +957,8 @@ public class HomeDisplay {
         
                             else {
                                 labelHapus.setForeground(merah);
-                                labelHapus.setBounds(0, 0, 600, 50);
-                                labelHapus.setText("Gagal meminjamkan buku");
+                                labelHapus.setBounds(0, 0, 630, 50);
+                                labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -973,8 +974,8 @@ public class HomeDisplay {
         
                             else {
                                 labelHapus.setForeground(merah);
-                                labelHapus.setBounds(0, 0, 600, 50);
-                                labelHapus.setText("Gagal meminjamkan buku");
+                                labelHapus.setBounds(0, 0, 630, 50);
+                                labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1009,8 +1010,8 @@ public class HomeDisplay {
         
                             else {
                                 labelHapus.setForeground(merah);
-                                labelHapus.setBounds(0, 0, 600, 50);
-                                labelHapus.setText("Gagal meminjamkan buku");
+                                labelHapus.setBounds(0, 0, 630, 50);
+                                labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1064,6 +1065,7 @@ public class HomeDisplay {
                 tombolOke.setVisible(false);
                 tombolEdit.setVisible(true);
                 tombolBatal.setVisible(false);
+                labelTambahan.setVisible(true);
                 fieldId.setVisible(false);
                 fieldId.setText("");
                 fieldJudul.setVisible(false);

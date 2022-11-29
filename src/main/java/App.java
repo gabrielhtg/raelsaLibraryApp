@@ -3,7 +3,7 @@ public class App {
         // new HomeDisplay("Gabriel Cesar Hutagalung", "source\\bright.png");
         // new LoginDisplay();
         // new TambahBuku();
-        // new Detail();
+        // new Detail("b1");
         // new InfoMember();
         // new TambahMember();
         new LogPerpus();

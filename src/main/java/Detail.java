@@ -86,7 +86,6 @@ public class Detail {
         frame.setVisible(true);
         // frame.setLayout(new FlowLayout());
         // frame.setSize(700, 460);
-        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         
@@ -106,7 +105,7 @@ public class Detail {
         panelAtas.add(tulisan);
         panel[0].add(panelAtas);
 
-        panel[0].setPreferredSize(new Dimension(700, 460));
+        panel[0].setPreferredSize(new Dimension(700, 280));
 
         panel[1].setPreferredSize(new Dimension(200-30, 200));
         // panel[1].setBackground(Color.BLUE);
@@ -152,5 +151,6 @@ public class Detail {
         frame.add(panel[0]);
 
         frame.pack();
+        frame.setLocationRelativeTo(null);
     }
 }
