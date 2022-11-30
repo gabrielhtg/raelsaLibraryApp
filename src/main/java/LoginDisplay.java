@@ -38,6 +38,7 @@ public class LoginDisplay {
                 return false;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
