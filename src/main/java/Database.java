@@ -8,7 +8,7 @@ public class Database {
     
     public Database () {
         try {
-            koneksi = DriverManager.getConnection("jdbc:mysql://blldgh53ylx5abq8vh6b-mysql.services.clever-cloud.com:3306/blldgh53ylx5abq8vh6b", "ueiftuqyioofa9eu", "SFGGz8kxtoSt40n7WQxs");
+            koneksi = DriverManager.getConnection("jdbc:mysql://sql6.freesqldatabase.com:3306/sql6581914", "sql6581914", "3wNAA68bjs");
 
             perintah = koneksi.createStatement();
         }
