@@ -714,13 +714,13 @@ public class HomeDisplay {
         Thread alwaysCek = new Thread(new Runnable(){
             @Override
             public void run() {
+                Database dataRaelsa = new Database();
                 while (true) {
 
                     String sql3 = String.format("select nim, time from logperpus");
                     ArrayList<String[]> keluarkan = new ArrayList<>();
     
                     try {
-                        Database dataRaelsa = new Database();
 
                         ResultSet rs = dataRaelsa.perintah.executeQuery(sql3);
                         
@@ -729,14 +729,13 @@ public class HomeDisplay {
                             dataUser[0] = rs.getString("nim");
                             dataUser[1] = rs.getString("time");
                             keluarkan.add(dataUser);
-                            // tableModel.insertRow(0, dataUser);
                         }
 
                     } catch (SQLException e) {
                         e.printStackTrace();
                         continue;
                     }
-
+                    
                     tableModel = new DefaultTableModel();
 
                     table.setEnabled(false);
@@ -752,13 +751,13 @@ public class HomeDisplay {
                         tableModel.insertRow(0, keluarkan.get(i));
                     }
 
-                    try {
-                        Database dataRaelsa = new Database();
-                        dataRaelsa.koneksi.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        continue;
-                    }
+                    // try {
+                    //     Database dataRaelsa = new Database();
+                    //     dataRaelsa.koneksi.close();
+                    // } catch (SQLException e) {
+                    //     e.printStackTrace();
+                    //     continue;
+                    // }
 
                     fieldInputID.requestFocusInWindow();
 
