@@ -19,6 +19,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -105,7 +106,6 @@ public class HomeDisplay {
     JScrollPane scrollPane = new JScrollPane();
     JTable table = new JTable();
     DefaultTableModel tableModel = new DefaultTableModel();
-    String[] dataUser = new String[2];
 
     String getJudul (String nim) {
         String sql = String.format("select * from pinjam where nim = '%s'", nim);
@@ -715,6 +715,28 @@ public class HomeDisplay {
             @Override
             public void run() {
                 while (true) {
+
+                    String sql3 = String.format("select nim, time from logperpus");
+                    ArrayList<String[]> keluarkan = new ArrayList<>();
+    
+                    try {
+                        Database dataRaelsa = new Database();
+
+                        ResultSet rs = dataRaelsa.perintah.executeQuery(sql3);
+                        
+                        while (rs.next()) {
+                            String[] dataUser = new String[2];
+                            dataUser[0] = rs.getString("nim");
+                            dataUser[1] = rs.getString("time");
+                            keluarkan.add(dataUser);
+                            // tableModel.insertRow(0, dataUser);
+                        }
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+
                     tableModel = new DefaultTableModel();
 
                     table.setModel(tableModel);
@@ -722,29 +744,19 @@ public class HomeDisplay {
                     tableModel.addColumn("Time");
                     table.setRowHeight(20);
                     table.setBackground(Color.white); 
-                    table.getColumnModel().getColumn(0).setMaxWidth(100);
-                    table.getColumnModel().getColumn(0).setPreferredWidth(150);
-
-                    Database dataRaelsa = new Database();
-
-                    String sql3 = String.format("select nim, time from logperpus");
+                    table.getColumnModel().getColumn(0).setMaxWidth(70);
+                    table.getColumnModel().getColumn(0).setPreferredWidth(130);
     
-                    try {
-                        ResultSet rs = dataRaelsa.perintah.executeQuery(sql3);
-                        
-                        while (rs.next()) {
-                            dataUser[0] = rs.getString("nim");
-                            dataUser[1] = rs.getString("time");
-                            tableModel.insertRow(0, dataUser);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+                    for (int i = 0; i < keluarkan.size(); i++) {
+                        tableModel.insertRow(0, keluarkan.get(i));
                     }
-    
+
                     try {
+                        Database dataRaelsa = new Database();
                         dataRaelsa.koneksi.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        continue;
                     }
 
                     fieldInputID.requestFocusInWindow();
@@ -753,6 +765,7 @@ public class HomeDisplay {
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        continue;
                     }
                 }
             }
