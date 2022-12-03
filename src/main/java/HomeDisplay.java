@@ -739,6 +739,7 @@ public class HomeDisplay {
 
                     tableModel = new DefaultTableModel();
 
+                    table.setEnabled(false);
                     table.setModel(tableModel);
                     tableModel.addColumn("NIM");
                     tableModel.addColumn("Time");
