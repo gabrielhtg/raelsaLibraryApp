@@ -125,9 +125,11 @@ public class Detail {
         labelAngkatan.setText   (String.format("Angkatan    : %s          ", temp[3]));
 
         labelTglPinjam.setFont(fontLabel);
+        labelTglPinjam.setPreferredSize(new Dimension(400, 25));
         labelTglPinjam.setText    (String.format("Tgl Start   : %s", temp[4]));
 
         labelTglTerakhir.setFont(fontLabel);
+        labelTglTerakhir.setPreferredSize(new Dimension(400, 30));
         labelTglTerakhir.setText  (String.format("Tgl End     : %s", temp[5]));
 
         panel[2].add(labelNIM);
