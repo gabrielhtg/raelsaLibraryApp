@@ -53,6 +53,7 @@ public class Detail {
                 temp[4] = String.format("%s-%s-%s", tanggal1[2], tanggal1[1], tanggal1[0]);
                 temp[5] = String.format("%s-%s-%s", tanggal2[2], tanggal2[1], tanggal2[0]);
                 nim = rs.getString("nim");
+                rs.close();
                 dataRaelsa.koneksi.close();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -68,6 +69,7 @@ public class Detail {
                 temp[2] = result.getString("prodi");
                 temp[3] = result.getString("angkatan");
                 temp[6] = result.getString("foto");
+                result.close();
                 dataRaelsa.koneksi.close();
             } catch(SQLException e) {
                 e.printStackTrace();

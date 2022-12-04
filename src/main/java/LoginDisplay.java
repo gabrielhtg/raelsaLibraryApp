@@ -29,11 +29,13 @@ public class LoginDisplay {
             if (password.equals(result.getString("pass"))) {
                 nama = result.getString("nama");
                 foto = result.getString("foto");
+                result.close();
                 databaseRaelsa.koneksi.close();
                 return true;
             }
 
             else {
+                result.close();
                 databaseRaelsa.koneksi.close();
                 return false;
             }

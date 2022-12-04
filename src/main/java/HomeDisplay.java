@@ -106,21 +106,24 @@ public class HomeDisplay {
     JScrollPane scrollPane = new JScrollPane();
     JTable table = new JTable();
     DefaultTableModel tableModel = new DefaultTableModel();
+    Database dataRaelsa = new Database();
 
     String getJudul (String nim) {
         String sql = String.format("select * from pinjam where nim = '%s'", nim);
 
-        Database dataRaelsa = new Database();
+        // Database dataRaelsa = new Database();
         try {
             ResultSet rs = dataRaelsa.perintah.executeQuery(sql);
             rs.next();
             String book_id = rs.getString("book_id");
             // Date tglPeminjaman = rs.getDate("waktuPinjam");
+            rs.close();
 
             sql = String.format("select judul from book where book_id = '%s'", book_id);
             ResultSet rs2 = dataRaelsa.perintah.executeQuery(sql);
             rs2.next();
             String judul = rs2.getString("judul");
+            rs2.close();
             
             return String.format("%s (%s)", judul, book_id.toUpperCase());
         } catch (SQLException e) {
@@ -132,17 +135,19 @@ public class HomeDisplay {
     String getPeminjam (String book_id) {
         String sql = String.format("select * from pinjam where book_id = '%s'", book_id);
 
-        Database dataRaelsa = new Database();
+        // Database dataRaelsa = new Database();
         try {
             ResultSet rs = dataRaelsa.perintah.executeQuery(sql);
             rs.next();
             String nim = rs.getString("nim");
             Date tglPeminjaman = rs.getDate("waktuPinjam");
+            rs.close();
 
             sql = String.format("select nama from member where nim = '%s'", nim);
             ResultSet rs2 = dataRaelsa.perintah.executeQuery(sql);
             rs2.next();
             String nama = rs2.getString("nama");
+            rs2.close();
 
             return String.format("%s(%s) D: %s", nama, book_id.toUpperCase(), tglPeminjaman.toString());
         } catch (SQLException e) {
@@ -166,15 +171,16 @@ public class HomeDisplay {
 
     boolean pinjamkanBuku (String book_id, String nim) {
         String query = String.format("insert into pinjam (book_id, nim, waktuKembali) value ('%s', '%s', '%s')", book_id, nim, LocalDate.now().plusDays(3));
-        String sql1 = String.format("select count(%s) from pinjam;", nim);
+        String sql1 = String.format("select count(nim) from pinjam where nim='%s'", nim);
         int count = 0;
         
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             ResultSet rs = dataRaelsa.perintah.executeQuery(sql1);
             rs.next();
             count = rs.getInt("count(nim)");
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -184,11 +190,11 @@ public class HomeDisplay {
             String sql3 = String.format("update book set status = 1 where book_id = '%s'", book_id);
 
             try {
-                Database dataRaelsa = new Database();
+                // Database dataRaelsa = new Database();
                 dataRaelsa.perintah.executeUpdate(query);
                 dataRaelsa.perintah.executeUpdate(sql2);
                 dataRaelsa.perintah.executeUpdate(sql3);
-                dataRaelsa.koneksi.close();
+                // dataRaelsa.koneksi.close();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -206,7 +212,7 @@ public class HomeDisplay {
         String sql1 = String.format("select book_id from pinjam where nim = '%s'", nim);
 
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             ResultSet rs = dataRaelsa.perintah.executeQuery(sql1);
             rs.next();
             String temp = rs.getString("book_id");
@@ -218,11 +224,13 @@ public class HomeDisplay {
                 dataRaelsa.perintah.executeUpdate(query);
                 dataRaelsa.perintah.executeUpdate(sql2);
                 dataRaelsa.perintah.executeUpdate(sql3);
-                dataRaelsa.koneksi.close();
+                // dataRaelsa.koneksi.close();
+                rs.close();
                 return true;
             }
             
             else {
+                rs.close();
                 return false;
             }
         } catch (SQLException e) {
@@ -235,7 +243,7 @@ public class HomeDisplay {
         String sql = String.format("select * from member where nim = '%s'", id);
 
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             ResultSet result = dataRaelsa.perintah.executeQuery(sql);
             result.next();
             temp[0] = result.getString("nim");
@@ -244,7 +252,8 @@ public class HomeDisplay {
             temp[3] = result.getString("angkatan");
             temp[4] = String.valueOf(result.getInt("status"));
             temp[5] = result.getString("foto");
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
+            result.close();
             return true;
 
         } catch (SQLException e) {
@@ -256,9 +265,9 @@ public class HomeDisplay {
         String sql = String.format("delete from member where nim = '%s'", id);
 
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             dataRaelsa.perintah.executeUpdate(sql);
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
 
         } catch (SQLException e) {
             e.getSQLState();
@@ -286,9 +295,9 @@ public class HomeDisplay {
         String sql = String.format("update book set book_id = '%s', judul = '%s', penulis = '%s', tahun = '%s', foto = '%s' where book_id = '%s'", idBaru, judul, penulis, tahun, foto, idLama);
 
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             dataRaelsa.perintah.executeUpdate(sql);
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
             return true;
 
         } catch (SQLException e) {
@@ -301,9 +310,9 @@ public class HomeDisplay {
         String sql = String.format("update member set nim = '%s', nama = '%s', prodi = '%s', angkatan = '%s', foto = '%s' where nim = '%s'", idBaru, nama, prodi, angkatan, foto, idLama);
 
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             dataRaelsa.perintah.executeUpdate(sql);
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
             return true;
 
         } catch (SQLException e) {
@@ -316,7 +325,6 @@ public class HomeDisplay {
         String sql = String.format("select * from book where book_id = '%s'", kodeBuku);
 
         try {
-            Database dataRaelsa = new Database();
             ResultSet result = dataRaelsa.perintah.executeQuery(sql);
             result.next();
             temp[0] = result.getString("book_id");
@@ -325,7 +333,8 @@ public class HomeDisplay {
             temp[3] = result.getString("tahun");
             temp[4] = String.valueOf(result.getInt("status"));
             temp[5] = result.getString("foto");
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
+            result.close();
             return true;
 
         } catch (SQLException e) {
@@ -337,9 +346,9 @@ public class HomeDisplay {
         String sql = String.format("delete from book where book_id = '%s'", id);
 
         try {
-            Database dataRaelsa = new Database();
+            // Database dataRaelsa = new Database();
             dataRaelsa.perintah.executeUpdate(sql);
-            dataRaelsa.koneksi.close();
+            // dataRaelsa.koneksi.close();
 
         } catch (SQLException e) {
         }
@@ -398,8 +407,8 @@ public class HomeDisplay {
                 }
         
                 logoBuku.setIcon(changeSize(temp[5], 512));
-                labelHapus.setVisible(false);
-                labelHapus.setText("");
+                // labelHapus.setVisible(false);
+                // labelHapus.setText("");
             }
         
             else {
@@ -479,8 +488,8 @@ public class HomeDisplay {
                 }
         
                 logoBuku.setIcon(changeSize(temp[5], 512));
-                labelHapus.setVisible(false);
-                labelHapus.setText("");
+                // labelHapus.setVisible(false);
+                // labelHapus.setText("");
             }
         
             else {
@@ -559,7 +568,7 @@ public class HomeDisplay {
                 }
         
                 logoBuku.setIcon(changeSize(temp[5], 512));
-                labelHapus.setText("");
+                // labelHapus.setText("");
             }
         
             else {
@@ -714,7 +723,7 @@ public class HomeDisplay {
         Thread alwaysCek = new Thread(new Runnable(){
             @Override
             public void run() {
-                Database dataRaelsa = new Database();
+                // Database dataRaelsa = new Database();
                 while (true) {
 
                     String sql3 = String.format("select nim, time from logperpus");
@@ -731,6 +740,7 @@ public class HomeDisplay {
                             keluarkan.add(dataUser);
                         }
 
+                        rs.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
                         continue;
@@ -798,7 +808,14 @@ public class HomeDisplay {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose();                
+                frame.dispose();
+                alwaysCek.stop();
+                try {
+                    dataRaelsa.koneksi.close();
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }                
             }
             
         });
@@ -997,6 +1014,7 @@ public class HomeDisplay {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                labelHapus.setVisible(false);
                 if (labelIdOutput.getText().toLowerCase().charAt(0) == 'b') { // ketika id buku diimulai dari b
                     if (temp[4].equals("0")) {
                         String sementara = JOptionPane.showInputDialog("Masukkan ID Member");
@@ -1012,7 +1030,7 @@ public class HomeDisplay {
                         else {
                             labelHapus.setForeground(merah);
                             labelHapus.setBounds(0, 0, 630, 50);
-                            labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
+                            labelHapus.setText("Gagal! Buku Tidak Tersedia");
                             labelHapus.setVisible(true);
                         }
                     }
@@ -1035,7 +1053,7 @@ public class HomeDisplay {
                             else {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 630, 50);
-                                labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
+                                labelHapus.setText("Gagal! Buku Tidak Tersedia");
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1052,7 +1070,7 @@ public class HomeDisplay {
                             else {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 630, 50);
-                                labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
+                                labelHapus.setText("Gagal! Buku Tidak Tersedia");
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1088,7 +1106,7 @@ public class HomeDisplay {
                             else {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 630, 50);
-                                labelHapus.setText("Gagal! Buku Sudah Dipinjamkan");
+                                labelHapus.setText("Gagal! Buku Tidak Tersedia");
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1104,6 +1122,7 @@ public class HomeDisplay {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                tombolHapusBuku.setVisible(false);
                 fieldInputID.setVisible(false);
                 labelInputID.setVisible(false);
                 tombolOke.setVisible(true);
@@ -1145,6 +1164,7 @@ public class HomeDisplay {
                 labelTambahan.setVisible(true);
                 fieldId.setVisible(false);
                 fieldId.setText("");
+                tombolHapusBuku.setVisible(true);
                 fieldJudul.setVisible(false);
                 fieldJudul.setText("");
                 fieldPenulis.setVisible(false);
@@ -1526,6 +1546,13 @@ public class HomeDisplay {
             public void windowClosed(WindowEvent e) {
                 if (tampilkan != 0) {
                     new LoginDisplay();
+                    alwaysCek.stop();
+                    try {
+                        dataRaelsa.koneksi.close();
+                    } catch (SQLException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                 }
             }
 
@@ -1557,6 +1584,7 @@ public class HomeDisplay {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     tampilkanInfoMember(fieldInputID.getText());
+                    labelHapus.setVisible(false);
                     fieldInputID.requestFocusInWindow();
                 }
             }
