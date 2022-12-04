@@ -108,6 +108,24 @@ public class HomeDisplay {
     DefaultTableModel tableModel = new DefaultTableModel();
     Database dataRaelsa = new Database();
 
+    void tungguBentar() {
+        Thread tampilkan = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }                            
+                labelHapus.setText("");
+            }
+            
+        });
+
+        tampilkan.start();
+    }
+
     String getJudul (String nim) {
         String sql = String.format("select * from pinjam where nim = '%s'", nim);
 
@@ -436,6 +454,7 @@ public class HomeDisplay {
                 labelHapus.setVisible(true);
                 labelHapus.setForeground(merah);
                 labelHapus.setText("ID Tidak Ditemukan");
+                tungguBentar();
                 panel1.setPreferredSize(new Dimension(800, 120));
                 panel2.setPreferredSize(new Dimension(210, 450));
                 panel3.setPreferredSize(new Dimension(650, 450));
@@ -505,6 +524,7 @@ public class HomeDisplay {
                 labelStatusBuku.setVisible(true);
                 labelHapus.setForeground(merah);
                 labelHapus.setText("ID Tidak Ditemukan");
+                tungguBentar();
                 tombolInfoPeminjam.setVisible(false);
                 panel1.setPreferredSize(new Dimension(800, 120));
                 panel2.setPreferredSize(new Dimension(210, 450));
@@ -578,6 +598,7 @@ public class HomeDisplay {
                 labelHapus.setVisible(true);
                 labelHapus.setForeground(merah);
                 labelHapus.setText("ID Tidak Ditemukan");
+                tungguBentar();
                 tombolInfoPeminjam.setVisible(false);
                 panel1.setPreferredSize(new Dimension(800, 120));
                 panel2.setPreferredSize(new Dimension(210, 450));
@@ -1023,6 +1044,7 @@ public class HomeDisplay {
                             labelHapus.setForeground(Color.GREEN);
                             labelHapus.setBounds(0, 0, 600, 50);
                             labelHapus.setText("Berhasil meminjamkan buku");
+                            tungguBentar();
                             tampilkanInfoMember(labelIdOutput.getText());
                             labelHapus.setVisible(true);
                         }
@@ -1031,6 +1053,7 @@ public class HomeDisplay {
                             labelHapus.setForeground(merah);
                             labelHapus.setBounds(0, 0, 630, 50);
                             labelHapus.setText("Gagal! Buku Tidak Tersedia");
+                            tungguBentar();
                             labelHapus.setVisible(true);
                         }
                     }
@@ -1046,6 +1069,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(Color.GREEN);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Buku Berhasil Dipinjamkan");
+                                tungguBentar();
                                 tampilkanInfoMember(labelIdOutput.getText());
                                 labelHapus.setVisible(true);
                             }
@@ -1054,6 +1078,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 630, 50);
                                 labelHapus.setText("Gagal! Buku Tidak Tersedia");
+                                tungguBentar();
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1063,6 +1088,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(Color.GREEN);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Berhasil meminjamkan buku");
+                                tungguBentar();
                                 tampilkanInfoMember(labelIdOutput.getText());
                                 labelHapus.setVisible(true);
                             }
@@ -1071,6 +1097,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 630, 50);
                                 labelHapus.setText("Gagal! Buku Tidak Tersedia");
+                                tungguBentar();
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1082,6 +1109,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(Color.GREEN);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Buku Berhasil Dikembalikan");
+                                tungguBentar();
                                 tampilkanInfoMember(labelIdOutput.getText());
                                 labelHapus.setVisible(true);
                             }
@@ -1090,6 +1118,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Gagal mengembalikan buku");
+                                tungguBentar();
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1099,6 +1128,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(Color.GREEN);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Buku Berhasil Dikembalikan");
+                                tungguBentar();
                                 tampilkanInfoMember(labelIdOutput.getText());
                                 labelHapus.setVisible(true);
                             }
@@ -1107,6 +1137,7 @@ public class HomeDisplay {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setBounds(0, 0, 630, 50);
                                 labelHapus.setText("Gagal! Buku Tidak Tersedia");
+                                tungguBentar();
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1202,6 +1233,7 @@ public class HomeDisplay {
                                 labelHapus.setVisible(true);
                                 tombolPinjam.setVisible(true);
                                 labelHapus.setText("Berhasil Mengedit Buku");
+                                tungguBentar();
                                 String idSementara = fieldId.getText();
 
                                 if (cekBuku(idSementara)) {
@@ -1234,6 +1266,7 @@ public class HomeDisplay {
                                 else {
                                     labelHapus.setBackground(merah);
                                     labelHapus.setText("Buku Tidak Ditemukan");
+                                    tungguBentar();
                                     labelIdOutput.setText     ("-");
                                     labelJudulOutput.setText  ("-");
                                     labelPenulisOutput.setText("-");
@@ -1247,6 +1280,7 @@ public class HomeDisplay {
                                 labelHapus.setBackground(merah);
                                 labelHapus.setBounds(40, 0, 600, 50);
                                 labelHapus.setText("Gagal Mengedit Buku");
+                                tungguBentar();
                                 labelHapus.setVisible(true);
                             }
                             
@@ -1268,6 +1302,7 @@ public class HomeDisplay {
                             labelHapus.setVisible(true);
                             tombolPinjam.setVisible(true);
                             labelHapus.setText("Berhasil Mengedit Buku");
+                            tungguBentar();
                             String idSementara = fieldId.getText();
 
                             if (cekBuku(idSementara)) {
@@ -1300,6 +1335,7 @@ public class HomeDisplay {
                             else {
                                 labelHapus.setBackground(merah);
                                 labelHapus.setText("Buku Tidak Ditemukan");
+                                tungguBentar();
                                 labelIdOutput.setText     ("-");
                                 labelJudulOutput.setText  ("-");
                                 labelPenulisOutput.setText("-");
@@ -1313,6 +1349,7 @@ public class HomeDisplay {
                             labelHapus.setBackground(merah);
                             labelHapus.setBounds(40, 0, 600, 50);
                             labelHapus.setText("Gagal Mengedit Buku");
+                            tungguBentar();
                             labelHapus.setVisible(true);
                         }
                     }
@@ -1354,6 +1391,7 @@ public class HomeDisplay {
                                 tombolPinjam.setVisible(true);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Berhasil Mengedit Member");
+                                tungguBentar();
 
                                 if (cekMember(idSementara)) {
                                     fieldInputID.setText("");
@@ -1376,6 +1414,7 @@ public class HomeDisplay {
                                 else {
                                     labelHapus.setBackground(merah);
                                     labelHapus.setText("Member Tidak Ditemukan");
+                                    tungguBentar();
                                     labelIdOutput.setText     ("-");
                                     labelJudulOutput.setText  ("-");
                                     labelTahunOutput.setText("-");
@@ -1388,6 +1427,7 @@ public class HomeDisplay {
                             else {
                                 labelHapus.setForeground(merah);
                                 labelHapus.setText("Gagal Mengedit Member");
+                                tungguBentar();
                                 labelHapus.setVisible(true);
                             }
                         }
@@ -1418,6 +1458,7 @@ public class HomeDisplay {
                                 tombolPinjam.setVisible(true);
                                 labelHapus.setBounds(0, 0, 600, 50);
                                 labelHapus.setText("Berhasil Mengedit Member");
+                                tungguBentar();
                                 labelIdOutput.setText     (temp[0]);
                                 labelJudulOutput.setText  (temp[1]);
                                 labelPenulisOutput.setText(temp[2]);
@@ -1438,6 +1479,7 @@ public class HomeDisplay {
 
                         else {
                             labelHapus.setText("Gagal Mengedit Member");
+                            tungguBentar();
                         }
                     }
 
@@ -1509,6 +1551,7 @@ public class HomeDisplay {
                             
                             logoBuku.setIcon(changeSize("source\\fotoKosong.jpg", 512));
                             labelHapus.setText("Buku Berhasil Dihapus");
+                            tungguBentar();
                             File kuhapuslahKau = new File(temp[5]);
                             kuhapuslahKau.delete();
                             
@@ -1522,6 +1565,7 @@ public class HomeDisplay {
                             labelPenulisOutput.setText  ("-");
                             labelStatusOutput.setText   ("-");
                             labelHapus.setText("Member Berhasil Dihapus");
+                            tungguBentar();
                             
                             logoBuku.setIcon(changeSize(fotoLibrarian, 512));
                         }
