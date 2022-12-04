@@ -87,7 +87,7 @@ public class Detail {
         frame.setTitle("Detail " + id);
         frame.setVisible(true);
         // frame.setLayout(new FlowLayout());
-        // frame.setSize(700, 460);
+        // frame.setSize(800, 460);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         
@@ -99,7 +99,7 @@ public class Detail {
             panel[i].setLayout(new FlowLayout(FlowLayout.LEFT));
         }   
 
-        panelAtas.setPreferredSize(new Dimension(700, 50));
+        panelAtas.setPreferredSize(new Dimension(800, 50));
         panelAtas.setLayout(new FlowLayout());
         
         JLabel tulisan = new JLabel("Data Peminjam");
@@ -107,7 +107,7 @@ public class Detail {
         panelAtas.add(tulisan);
         panel[0].add(panelAtas);
 
-        panel[0].setPreferredSize(new Dimension(700, 280));
+        panel[0].setPreferredSize(new Dimension(800, 280));
 
         panel[1].setPreferredSize(new Dimension(200-30, 200));
         // panel[1].setBackground(Color.BLUE);
@@ -139,7 +139,7 @@ public class Detail {
         panel[2].add(labelTglPinjam);
         panel[2].add(labelTglTerakhir);
         panel[2].setBackground(Color.BLUE);
-        panel[2].setPreferredSize(new Dimension(485+30, 200));
+        panel[2].setPreferredSize(new Dimension(485+130, 200));
 
         for (int i = 0; i < label.length; i++) {
             label[i] = new JLabel();

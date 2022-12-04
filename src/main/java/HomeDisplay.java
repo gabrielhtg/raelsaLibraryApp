@@ -1628,7 +1628,7 @@ public class HomeDisplay {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     tampilkanInfoMember(fieldInputID.getText());
-                    labelHapus.setVisible(false);
+                    // labelHapus.setVisible(false);
                     fieldInputID.requestFocusInWindow();
                 }
             }
