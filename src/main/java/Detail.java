@@ -113,15 +113,19 @@ public class Detail {
         // panel[1].setBackground(Color.BLUE);
 
         labelNIM.setFont(fontLabel);
+        labelNIM.setPreferredSize(new Dimension(400, 25));
         labelNIM.setText        (String.format("NIM         : %s", temp[0]));
 
         labelNama.setFont(fontLabel);
+        labelNama.setPreferredSize(new Dimension(400, 25));
         labelNama.setText       (String.format("Nama        : %s", temp[1]));
 
         labelProdi.setFont(fontLabel);
+        labelProdi.setPreferredSize(new Dimension(400, 25));
         labelProdi.setText      (String.format("Prodi       : %s", temp[2]));
 
         labelAngkatan.setFont(fontLabel);
+        labelAngkatan.setPreferredSize(new Dimension(400, 25));
         labelAngkatan.setText   (String.format("Angkatan    : %s          ", temp[3]));
 
         labelTglPinjam.setFont(fontLabel);

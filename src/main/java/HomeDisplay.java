@@ -1230,6 +1230,7 @@ public class HomeDisplay {
                         if (temp[5] != null) {
                             if (editBuku(fieldId.getText().toUpperCase(), fieldJudul.getText(), fieldPenulis.getText(), fieldTahun.getText(), temp[5].replace("\\", "\\\\"), temp[0])) {
                                 labelHapus.setForeground(Color.green);
+                                labelHapus.setBounds(20, 0, 600, 50);
                                 labelHapus.setVisible(true);
                                 tombolPinjam.setVisible(true);
                                 labelHapus.setText("Berhasil Mengedit Buku");
@@ -1300,6 +1301,7 @@ public class HomeDisplay {
                         if (editBuku(fieldId.getText().toUpperCase(), fieldJudul.getText(), fieldPenulis.getText(), fieldTahun.getText(), "source\\\\" + fieldId.getText() + "." + namaFile[namaFile.length - 1].split("\\.")[1], temp[0])) {
                             labelHapus.setForeground(Color.green);
                             labelHapus.setVisible(true);
+                            labelHapus.setBounds(20, 0, 600, 50);
                             tombolPinjam.setVisible(true);
                             labelHapus.setText("Berhasil Mengedit Buku");
                             tungguBentar();
@@ -1511,6 +1513,10 @@ public class HomeDisplay {
                     fieldInputID.setVisible(true);
                     fieldInputID.requestFocusInWindow();
                 }
+
+                tombolHapusBuku.setVisible(true);
+                labelTambahan.setVisible(true);
+                panelBawah.setVisible(true);
             }
         });
 
@@ -1521,7 +1527,6 @@ public class HomeDisplay {
         tombolHapusBuku.setFont(new Font("Arial", Font.PLAIN, 20));
         tombolHapusBuku.setBounds(1100, 0, 200, 50);
         panelBawah.add(tombolHapusBuku);
-
 
         inputMap.put(delKeyStroke, delKeyStroke.toString());
 
