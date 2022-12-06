@@ -334,7 +334,7 @@ public class HomeDisplay {
             return true;
 
         } catch (SQLException e) {
-            System.out.println("Gagal mengedit data member.");
+            // System.out.println("Gagal mengedit data member.");
             return false;
         }
     }
@@ -1570,7 +1570,7 @@ public class HomeDisplay {
                             labelHapus.setBounds(0, 0, 600, 50);
                             labelHapus.setText("Member Berhasil Dihapus");
                             labelHapus.setVisible(true);
-                            System.out.println("Berhasil");
+                            // System.out.println("Berhasil");
                             tungguBentar();
                             logoBuku.setIcon(changeSize("source\\fotoKosong.jpg", 512));
                         }
