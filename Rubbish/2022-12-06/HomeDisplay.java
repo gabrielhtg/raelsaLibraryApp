@@ -1567,12 +1567,9 @@ public class HomeDisplay {
                             labelTahunOutput.setText     ("-");
                             labelPenulisOutput.setText  ("-");
                             labelStatusOutput.setText   ("-");
-                            labelHapus.setBounds(0, 0, 600, 50);
-                            labelHapus.setText("Member Berhasil Dihapus");
-                            labelHapus.setVisible(true);
-                            System.out.println("Berhasil");
-                            tungguBentar();
                             logoBuku.setIcon(changeSize("source\\fotoKosong.jpg", 512));
+                            labelHapus.setText("Member Berhasil Dihapus");
+                            tungguBentar();
                         }
                     }
                 }                

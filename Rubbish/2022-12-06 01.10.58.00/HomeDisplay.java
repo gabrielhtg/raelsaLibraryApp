@@ -20,6 +20,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import javax.print.event.PrintEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -1562,17 +1564,15 @@ public class HomeDisplay {
 
                         else {
                             hapusMember(temp[0]);
+                            System.out.println("Berhasil dihapus");
                             labelIdOutput.setText     ("-");
                             labelJudulOutput.setText   ("-");
                             labelTahunOutput.setText     ("-");
                             labelPenulisOutput.setText  ("-");
                             labelStatusOutput.setText   ("-");
-                            labelHapus.setBounds(0, 0, 600, 50);
-                            labelHapus.setText("Member Berhasil Dihapus");
-                            labelHapus.setVisible(true);
-                            System.out.println("Berhasil");
-                            tungguBentar();
                             logoBuku.setIcon(changeSize("source\\fotoKosong.jpg", 512));
+                            labelHapus.setText("Member Berhasil Dihapus");
+                            tungguBentar();
                         }
                     }
                 }                
